@@ -1,51 +1,49 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TrainConsistManagement {
 
-    static class Bogie {
-        String trainName;
-        int seats;
+    static class Train {
+        String trainId;
+        String cargoCode;
 
-        Bogie(String trainName, int seats) {
-            this.trainName = trainName;
-            this.seats = seats;
+        Train(String trainId, String cargoCode) {
+            this.trainId = trainId;
+            this.cargoCode = cargoCode;
         }
 
         public String toString() {
-            return "Train: " + trainName + ", Seats: " + seats;
+            return "TrainID: " + trainId + ", CargoCode: " + cargoCode;
         }
     }
 
     public static void main(String[] args) {
         System.out.println("==================================");
-        System.out.println(" UC10 - Count Total Seats in Train ");
+        System.out.println(" UC11 - Validate Train ID & Cargo ");
         System.out.println("==================================");
 
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Train1", 72));
-        bogies.add(new Bogie("Train1", 72));
-        bogies.add(new Bogie("Train1", 72));
-        bogies.add(new Bogie("Train2", 60));
-        bogies.add(new Bogie("Train2", 60));
+        List<Train> trains = new ArrayList<>();
 
-        System.out.println("All Bogies:");
-        bogies.forEach(System.out::println);
+        trains.add(new Train("TR1234", "CG-567"));
+        trains.add(new Train("TR12", "CG-999"));
+        trains.add(new Train("TR5678", "INVALID"));
+        trains.add(new Train("TR0001", "CG-123"));
+
+        System.out.println("All Trains:");
+        trains.forEach(System.out::println);
 
 
-        Map<String, Integer> totalSeats = new HashMap<>();
+        String trainPattern = "TR\\d{4}";     // TR followed by 4 digits
+        String cargoPattern = "CG-\\d{3}";    // CG- followed by 3 digits
 
-        for (Bogie b : bogies) {
-            totalSeats.put(b.trainName,
-                    totalSeats.getOrDefault(b.trainName, 0) + b.seats);
-        }
+        System.out.println("\nValid Trains:");
 
-        System.out.println("\nTotal Seats per Train:");
-        for (Map.Entry<String, Integer> entry : totalSeats.entrySet()) {
-            System.out.println("Train: " + entry.getKey() +
-                    ", Total Seats: " + entry.getValue());
+        for (Train t : trains) {
+            if (t.trainId.matches(trainPattern) &&
+                    t.cargoCode.matches(cargoPattern)) {
+
+                System.out.println(t);
+            }
         }
     }
 }
