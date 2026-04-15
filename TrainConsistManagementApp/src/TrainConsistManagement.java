@@ -2,36 +2,44 @@ import java.util.*;
 
 public class TrainConsistManagement {
 
-    // Linear Search Method
-    public static boolean linearSearch(String[] bogieIds, String key) {
+    // Binary Search Method
+    public static boolean binarySearch(String[] bogieIds, String key) {
 
-        // Traverse array sequentially
-        for (int i = 0; i < bogieIds.length; i++) {
+        int low = 0;
+        int high = bogieIds.length - 1;
 
-            // Compare using equals()
-            if (bogieIds[i].equals(key)) {
-                return true; // Match found → stop early
+        while (low <= high) {
+
+            int mid = (low + high) / 2;
+
+            int comparison = bogieIds[mid].compareTo(key);
+
+            if (comparison == 0) {
+                return true; // Found
+            }
+            else if (comparison < 0) {
+                low = mid + 1; // Search right half
+            }
+            else {
+                high = mid - 1; // Search left half
             }
         }
 
-        return false; // No match found
+        return false; // Not found
     }
 
     public static void main(String[] args) {
 
-        // Array of bogie IDs (unsorted)
+        // Sorted array of bogie IDs (IMPORTANT)
         String[] bogieIds = {"BG101","BG205","BG309","BG412","BG550"};
 
-        // Search key
         String searchKey = "BG309";
 
-        System.out.println("Bogie List: " + Arrays.toString(bogieIds));
+        System.out.println("Sorted Bogie List: " + Arrays.toString(bogieIds));
         System.out.println("Searching for: " + searchKey);
 
-        // Perform search
-        boolean found = linearSearch(bogieIds, searchKey);
+        boolean found = binarySearch(bogieIds, searchKey);
 
-        // Display result
         if (found) {
             System.out.println("Bogie ID FOUND");
         } else {
