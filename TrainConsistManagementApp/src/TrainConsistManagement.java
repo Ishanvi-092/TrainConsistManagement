@@ -1,49 +1,58 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.*;
+
+class GoodsBogie {
+    String type;   // Cylindrical, Rectangular, Open, Box
+    String cargo;  // Petroleum, Coal, Grain, etc.
+
+    public GoodsBogie(String type, String cargo) {
+        this.type = type;
+        this.cargo = cargo;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    @Override
+    public String toString() {
+        return "Bogie Type: " + type + ", Cargo: " + cargo;
+    }
+}
 
 public class TrainConsistManagement {
 
-    static class Train {
-        String trainId;
-        String cargoCode;
-
-        Train(String trainId, String cargoCode) {
-            this.trainId = trainId;
-            this.cargoCode = cargoCode;
-        }
-
-        public String toString() {
-            return "TrainID: " + trainId + ", CargoCode: " + cargoCode;
-        }
-    }
-
     public static void main(String[] args) {
-        System.out.println("==================================");
-        System.out.println(" UC11 - Validate Train ID & Cargo ");
-        System.out.println("==================================");
 
-        List<Train> trains = new ArrayList<>();
+        // Create list of goods bogies
+        List<GoodsBogie> bogies = Arrays.asList(
+                new GoodsBogie("Cylindrical", "Petroleum"),
+                new GoodsBogie("Rectangular", "Coal"),
+                new GoodsBogie("Open", "Grain"),
+                new GoodsBogie("Cylindrical", "Petroleum")
+        );
 
-        trains.add(new Train("TR1234", "CG-567"));
-        trains.add(new Train("TR12", "CG-999"));
-        trains.add(new Train("TR5678", "INVALID"));
-        trains.add(new Train("TR0001", "CG-123"));
+        // Convert to stream and validate safety
+        boolean isSafe = bogies.stream()
+                .allMatch(bogie ->
+                        // Rule: Cylindrical → only Petroleum
+                        !bogie.getType().equalsIgnoreCase("Cylindrical") ||
+                                bogie.getCargo().equalsIgnoreCase("Petroleum")
+                );
 
-        System.out.println("All Trains:");
-        trains.forEach(System.out::println);
+        // Display bogies
+        System.out.println("Train Bogies:");
+        bogies.forEach(System.out::println);
 
-
-        String trainPattern = "TR\\d{4}";     // TR followed by 4 digits
-        String cargoPattern = "CG-\\d{3}";    // CG- followed by 3 digits
-
-        System.out.println("\nValid Trains:");
-
-        for (Train t : trains) {
-            if (t.trainId.matches(trainPattern) &&
-                    t.cargoCode.matches(cargoPattern)) {
-
-                System.out.println(t);
-            }
+        // Display result
+        if (isSafe) {
+            System.out.println("\nTrain formation is SAFE");
+        } else {
+            System.out.println("\nTrain formation is NOT SAFE");
         }
     }
 }
